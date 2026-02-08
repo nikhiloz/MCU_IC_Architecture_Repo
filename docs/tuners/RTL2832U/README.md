@@ -37,3 +37,7 @@ The RTL2832U digitises the IF signal from the tuner and streams raw I/Q samples 
 > PlantUML source: [SDR_dongle_architecture.puml](diagrams/SDR_dongle_architecture.puml)
 
 > TODO: Add register documentation, USB protocol details, and I/Q data format
+
+---
+
+**← Prev** [RDA5807](../RDA5807/) · [↑ Back to Main README](../../../README.md) · **Next →** [R820T2](../R820T2/)

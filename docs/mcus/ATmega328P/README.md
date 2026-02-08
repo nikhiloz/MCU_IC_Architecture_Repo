@@ -45,3 +45,7 @@ The ATmega328P is ideal for studying because its architecture is simple enough t
 > PlantUML source: [ATmega328P_architecture.puml](diagrams/ATmega328P_architecture.puml)
 
 > TODO: Add complete register map and AVR instruction set overview
+
+---
+
+**← Prev** [CC1101](../../tuners/CC1101/) · [↑ Back to Main README](../../../README.md) · **Next →** [RP2040](../RP2040/)

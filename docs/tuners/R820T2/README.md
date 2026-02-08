@@ -32,3 +32,7 @@ The **R820T2** is a wideband RF tuner IC by **Rafael Micro**. Commonly paired wi
 - **IF filter**: Bandwidth selection
 
 > TODO: Add register map, gain stages, and noise figure documentation
+
+---
+
+**← Prev** [RTL2832U](../RTL2832U/) · [↑ Back to Main README](../../../README.md) · **Next →** [CC1101](../CC1101/)

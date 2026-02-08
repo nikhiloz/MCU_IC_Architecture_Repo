@@ -25,3 +25,7 @@ The **RDA5807M** is an ultra-low-cost single-chip FM stereo tuner by **RDA Micro
 - Register-mapped I2C interface (16-bit registers)
 
 > TODO: Add architecture, pinout, and register documentation
+
+---
+
+**← Prev** [SI4703](../SI4703/) · [↑ Back to Main README](../../../README.md) · **Next →** [RTL2832U](../RTL2832U/)

@@ -49,3 +49,7 @@ The PIO blocks can implement custom I/O protocols in hardware:
 > PlantUML source: [RP2040_architecture.puml](diagrams/RP2040_architecture.puml)
 
 > TODO: Add PIO programming guide and memory map
+
+---
+
+**← Prev** [ATmega328P](../ATmega328P/) · [↑ Back to Main README](../../../README.md) · **Next →** [STM32F103](../STM32F103/)

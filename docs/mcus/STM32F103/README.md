@@ -43,3 +43,7 @@ The **STM32F103** is an ARM Cortex-M3 microcontroller by **STMicroelectronics**.
 | DMA | Yes (7 channels) | No | Yes (13 channels) |
 
 > TODO: Add architecture, clock tree, register map, and HAL vs LL comparison
+
+---
+
+**← Prev** [RP2040](../RP2040/) · [↑ Back to Main README](../../../README.md) · **Next →** [ESP32-C3](../ESP32_C3/)

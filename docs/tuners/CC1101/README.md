@@ -38,3 +38,7 @@ The **CC1101** is a low-cost sub-1 GHz RF transceiver by **Texas Instruments**. 
 | Use case | Simple sensor networks | Full IoT applications |
 
 > TODO: Add SPI register map, packet format, and configuration examples
+
+---
+
+**← Prev** [R820T2](../R820T2/) · [↑ Back to Main README](../../../README.md) · **Next →** [ATmega328P](../../mcus/ATmega328P/)

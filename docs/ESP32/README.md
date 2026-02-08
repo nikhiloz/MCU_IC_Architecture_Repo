@@ -64,3 +64,7 @@ The WROOM-32 module packages the ESP32 SoC with:
 - [ESP32 Technical Reference Manual](https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf)
 - [ESP32 Datasheet](https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf)
 - [ESP-IDF Programming Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/)
+
+---
+
+**← Prev** [SI4735](../SI4735/) · [↑ Back to Main README](../../README.md) · **Next →** [SI4703](../tuners/SI4703/)

@@ -28,3 +28,7 @@ The **SI4703** is an FM-only radio tuner IC by **Silicon Labs**. Unlike the SI47
 | Complexity | Simple | Complex |
 
 > TODO: Add architecture, pinout, and register documentation
+
+---
+
+**← Prev** [ESP32](../../ESP32/) · [↑ Back to Main README](../../../README.md) · **Next →** [RDA5807](../RDA5807/)
