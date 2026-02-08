@@ -37,6 +37,12 @@ The **CC1101** is a low-cost sub-1 GHz RF transceiver by **Texas Instruments**. 
 | CPU | None (SPI peripheral) | Dual-core Xtensa |
 | Use case | Simple sensor networks | Full IoT applications |
 
+## Architecture Diagram
+
+![CC1101 Architecture](diagrams/CC1101_architecture.png)
+
+> PlantUML source: [CC1101_architecture.puml](diagrams/CC1101_architecture.puml)
+
 > TODO: Add SPI register map, packet format, and configuration examples
 
 ---

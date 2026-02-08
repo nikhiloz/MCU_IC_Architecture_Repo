@@ -31,6 +31,12 @@ The **R820T2** is a wideband RF tuner IC by **Rafael Micro**. Commonly paired wi
 - **PLL**: Programmable local oscillator for frequency selection
 - **IF filter**: Bandwidth selection
 
+## Architecture Diagram
+
+![R820T2 Architecture](diagrams/R820T2_architecture.png)
+
+> PlantUML source: [R820T2_architecture.puml](diagrams/R820T2_architecture.puml)
+
 > TODO: Add register map, gain stages, and noise figure documentation
 
 ---

@@ -1,0 +1,48 @@
+@startuml
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam rectangleBorderThickness 2
+skinparam arrowColor #555555
+skinparam arrowThickness 2
+
+title <b>SI4703 — FM Tuner Architecture</b>\n<size:10>Analog FM tuner with RDS — no internal DSP</size>
+
+rectangle "FM Antenna\nInput" as ANT #B3E5FC
+
+rectangle "Low Noise\nAmplifier (LNA)" as LNA #BBDEFB
+rectangle "Mixer +\nLocal Oscillator" as MIX #BBDEFB
+rectangle "IF Filter\n(10.7 MHz)" as IF #BBDEFB
+rectangle "FM\nDemodulator" as DEMOD #C8E6C9
+rectangle "Stereo\nDecoder" as STEREO #C8E6C9
+rectangle "RDS\nDecoder" as RDS #FFF9C4
+
+rectangle "Audio Output\n(Left / Right)" as AUDIO #A5D6A7
+
+rectangle "I2C Interface\n(Register-mapped)" as I2C #FFE0B2
+rectangle "Host MCU" as MCU #FFCCBC
+
+ANT -down-> LNA
+LNA -down-> MIX
+MIX -down-> IF
+IF -down-> DEMOD
+DEMOD -down-> STEREO
+DEMOD -right-> RDS
+STEREO -down-> AUDIO
+I2C -left-> MCU
+
+note right of DEMOD
+  No DSP core
+  Fixed analog
+  signal path
+end note
+
+note right of I2C
+  16 registers
+  Direct read/write
+  (contrast: SI4735
+  uses commands)
+end note
+
+@enduml

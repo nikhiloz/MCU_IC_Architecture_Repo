@@ -27,7 +27,13 @@ The **SI4703** is an FM-only radio tuner IC by **Silicon Labs**. Unlike the SI47
 | Control | Register-mapped I2C | Command/response protocol |
 | Complexity | Simple | Complex |
 
-> TODO: Add architecture, pinout, and register documentation
+## Architecture Diagram
+
+![SI4703 Architecture](diagrams/SI4703_architecture.png)
+
+> PlantUML source: [SI4703_architecture.puml](diagrams/SI4703_architecture.puml)
+
+> TODO: Add pinout and register documentation
 
 ---
 

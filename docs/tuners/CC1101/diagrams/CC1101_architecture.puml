@@ -1,0 +1,48 @@
+@startuml
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam rectangleBorderThickness 2
+skinparam arrowColor #555555
+skinparam arrowThickness 2
+
+title <b>CC1101 — Sub-GHz RF Transceiver</b>\n<size:10>315/433/868/915 MHz, SPI-controlled packet radio</size>
+
+rectangle "Antenna\n(Sub-GHz)" as ANT #B3E5FC
+
+rectangle "RF Front-End\nLNA / PA" as RF #BBDEFB
+rectangle "Frequency\nSynthesizer\n(PLL + VCO)" as PLL #E1BEE7
+rectangle "Demodulator\n(FSK/GFSK/MSK\nOOK/ASK)" as DEMOD #C8E6C9
+rectangle "Modulator" as MOD #C8E6C9
+
+rectangle "Packet\nEngine" as PKT #FFF9C4
+rectangle "64-byte\nTX FIFO" as TXFIFO #FFE0B2
+rectangle "64-byte\nRX FIFO" as RXFIFO #FFE0B2
+
+rectangle "SPI Interface\n(4-wire)" as SPI #FFCCBC
+rectangle "Host MCU" as MCU #FFCCBC
+
+rectangle "Digital I/O\nGDO0 / GDO2" as GPIO #E8EAF6
+
+ANT -down-> RF
+RF -down-> DEMOD : RX path
+RF <-down- MOD : TX path
+PLL -right-> RF
+DEMOD -down-> PKT
+MOD <-down- PKT
+PKT -down-> RXFIFO
+TXFIFO -down-> PKT
+SPI -left-> MCU
+RXFIFO -down-> SPI
+TXFIFO <-down- SPI
+GPIO -left-> MCU
+
+note right of PKT
+  Hardware CRC
+  Preamble / sync
+  Address filtering
+  Auto-ACK
+end note
+
+@enduml

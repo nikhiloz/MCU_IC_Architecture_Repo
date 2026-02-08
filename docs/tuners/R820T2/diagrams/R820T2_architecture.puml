@@ -1,0 +1,46 @@
+@startuml
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam rectangleBorderThickness 2
+skinparam arrowColor #555555
+skinparam arrowThickness 2
+
+title <b>R820T2 — Wideband RF Tuner (24–1766 MHz)</b>\n<size:10>Analog front-end for SDR dongles, paired with RTL2832U</size>
+
+rectangle "Antenna\n(24–1766 MHz)" as ANT #B3E5FC
+
+rectangle "LNA\n(Low Noise\nAmplifier)" as LNA #BBDEFB
+rectangle "RF Tracking\nFilter" as FILT #BBDEFB
+rectangle "Mixer" as MIX #BBDEFB
+rectangle "IF Filter\n(Programmable BW)" as IF #C8E6C9
+rectangle "IF Amplifier\n(Variable Gain)" as IFAMP #C8E6C9
+rectangle "PLL + VCO\n(Frequency\nSynthesizer)" as PLL #E1BEE7
+
+rectangle "IF Output\nto RTL2832U" as OUT #FFE0B2
+
+rectangle "I2C Control\n(via RTL2832U)" as I2C #FFF9C4
+
+ANT -down-> LNA
+LNA -down-> FILT
+FILT -down-> MIX
+PLL -right-> MIX
+MIX -down-> IF
+IF -down-> IFAMP
+IFAMP -down-> OUT
+I2C -left-> PLL
+
+note right of OUT
+  Analog IF output
+  RTL2832U digitises
+  this with 8-bit ADC
+end note
+
+note right of LNA
+  Wideband coverage
+  24 MHz to 1766 MHz
+  in single chip
+end note
+
+@enduml

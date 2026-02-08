@@ -44,6 +44,12 @@ The **ESP32-C3** is a single-core **RISC-V** based WiFi/BLE SoC by **Espressif S
 - Direct comparison with ESP32 Xtensa — same SDK (ESP-IDF), different CPU core
 - Demonstrates how ISA choice affects: toolchain, code generation, performance
 
+## Architecture Diagram
+
+![ESP32-C3 Architecture](diagrams/ESP32_C3_architecture.png)
+
+> PlantUML source: [ESP32_C3_architecture.puml](diagrams/ESP32_C3_architecture.puml)
+
 > TODO: Add RISC-V instruction set details, architecture comparison with Xtensa
 
 ---

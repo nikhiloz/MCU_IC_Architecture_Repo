@@ -1,0 +1,47 @@
+@startuml
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam rectangleBorderThickness 2
+skinparam arrowColor #555555
+skinparam arrowThickness 2
+
+title <b>RDA5807 — Ultra-Low-Cost FM Tuner</b>\n<size:10>Single-chip FM receiver with built-in headphone amplifier</size>
+
+rectangle "FM Antenna\nInput" as ANT #B3E5FC
+
+rectangle "LNA" as LNA #BBDEFB
+rectangle "Mixer + PLL\nLocal Oscillator" as MIX #BBDEFB
+rectangle "IF Filter" as IF #BBDEFB
+rectangle "FM\nDemodulator" as DEMOD #C8E6C9
+rectangle "Stereo\nMultiplex\nDecoder" as STEREO #C8E6C9
+rectangle "RDS/RBDS\nDecoder" as RDS #FFF9C4
+
+rectangle "Headphone\nAmplifier" as AMP #FFE0B2
+rectangle "Audio Output\n(LOUT / ROUT)" as AUDIO #A5D6A7
+
+rectangle "I2C Interface\n(16-bit registers)" as I2C #FFE0B2
+rectangle "Host MCU" as MCU #FFCCBC
+
+rectangle "32.768 kHz\nCrystal" as XTAL #E1BEE7
+
+ANT -down-> LNA
+LNA -down-> MIX
+MIX -down-> IF
+IF -down-> DEMOD
+DEMOD -down-> STEREO
+DEMOD -right-> RDS
+STEREO -down-> AMP
+AMP -down-> AUDIO
+XTAL -right-> MIX
+I2C -left-> MCU
+
+note right of AMP
+  Built-in amp
+  drives headphones
+  directly — no
+  external DAC needed
+end note
+
+@enduml

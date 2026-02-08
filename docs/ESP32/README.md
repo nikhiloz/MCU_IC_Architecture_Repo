@@ -39,6 +39,12 @@ The **ESP32** is a low-cost, low-power system-on-chip (SoC) manufactured by **Es
 - SD/SDIO/MMC host controller
 - JTAG debugging interface
 
+## Architecture Overview
+
+![ESP32 Architecture](diagrams/ESP32_Architecture.png)
+
+> See [architecture.md](architecture.md) for detailed breakdown
+
 ## ESP32 Variant Comparison
 
 | Variant | Core | WiFi | BT | Flash | Key Difference |

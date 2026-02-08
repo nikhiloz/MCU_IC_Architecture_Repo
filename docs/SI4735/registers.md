@@ -2,6 +2,10 @@
 
 ## Command/Response Protocol
 
+![SI4735 Command Flow](diagrams/SI4735_Command_Flow.png)
+
+> PlantUML source: [SI4735_command_flow.puml](diagrams/SI4735_command_flow.puml)
+
 The SI4735 uses a **command-based** protocol rather than traditional register-mapped I/O. The host MCU sends commands via I2C/SPI and reads back status/response bytes.
 
 ### Command Format

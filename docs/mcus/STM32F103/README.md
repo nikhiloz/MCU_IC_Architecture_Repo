@@ -42,7 +42,13 @@ The **STM32F103** is an ARM Cortex-M3 microcontroller by **STMicroelectronics**.
 | USB | Yes | No | No (OTG on S2/S3) |
 | DMA | Yes (7 channels) | No | Yes (13 channels) |
 
-> TODO: Add architecture, clock tree, register map, and HAL vs LL comparison
+## Architecture Diagram
+
+![STM32F103 Architecture](diagrams/STM32F103_architecture.png)
+
+> PlantUML source: [STM32F103_architecture.puml](diagrams/STM32F103_architecture.puml)
+
+> TODO: Add clock tree, register map, and HAL vs LL comparison
 
 ---
 

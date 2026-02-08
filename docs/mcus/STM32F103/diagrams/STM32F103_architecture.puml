@@ -1,0 +1,53 @@
+@startuml
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam rectangleBorderThickness 2
+skinparam arrowColor #555555
+skinparam arrowThickness 2
+
+title <b>STM32F103 — ARM Cortex-M3 "Blue Pill"</b>\n<size:10>72 MHz, 64 KB Flash, 20 KB SRAM</size>
+
+rectangle "ARM Cortex-M3\n72 MHz\nThumb-2 ISA" as CPU #C8E6C9
+
+rectangle "Flash\n64 KB" as FLASH #BBDEFB
+rectangle "SRAM\n20 KB" as SRAM #BBDEFB
+
+rectangle "NVIC\n(Interrupt\nController)" as NVIC #E1BEE7
+rectangle "SysTick\nTimer" as SYSTICK #E1BEE7
+rectangle "DMA1\n(7 channels)" as DMA #E1BEE7
+
+rectangle "AHB Bus" as AHB #FFF9C4
+
+rectangle "APB2 (72 MHz)" as APB2 #FFE0B2
+rectangle "APB1 (36 MHz)" as APB1 #FFE0B2
+
+rectangle "GPIO A-E\n(51 I/O pins)" as GPIO #FFCCBC
+rectangle "USART1\nSPI1\nADC1/2\nTIM1/8" as APB2P #FFCCBC
+
+rectangle "USART2/3\nSPI2\nI2C1/2\nTIM2-4\nUSB\nCAN" as APB1P #FFCCBC
+
+rectangle "RCC\n(Clock Tree)" as RCC #B3E5FC
+rectangle "SWD / JTAG\nDebug" as DBG #B3E5FC
+
+CPU -down-> AHB
+FLASH -up-> AHB
+SRAM -up-> AHB
+NVIC -right-> CPU
+DMA -up-> AHB
+AHB -down-> APB2
+AHB -down-> APB1
+APB2 -down-> GPIO
+APB2 -down-> APB2P
+APB1 -down-> APB1P
+RCC -right-> AHB
+DBG -right-> CPU
+
+note bottom of CPU
+  Harvard architecture
+  Single-cycle multiply
+  Hardware divide
+end note
+
+@enduml

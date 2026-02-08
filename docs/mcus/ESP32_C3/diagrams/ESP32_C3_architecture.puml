@@ -1,0 +1,51 @@
+@startuml
+
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam rectangleBorderThickness 2
+skinparam arrowColor #555555
+skinparam arrowThickness 2
+
+title <b>ESP32-C3 — RISC-V WiFi/BLE SoC</b>\n<size:10>Single-core 160 MHz, WiFi 4 + BLE 5.0</size>
+
+rectangle "RISC-V\nSingle Core\n160 MHz\n(RV32IMC)" as CPU #C8E6C9
+
+rectangle "ROM\n384 KB" as ROM #BBDEFB
+rectangle "SRAM\n400 KB" as SRAM #BBDEFB
+rectangle "RTC SRAM\n8 KB" as RTCSRAM #BBDEFB
+rectangle "External Flash\n(up to 16 MB)" as FLASH #BBDEFB
+
+rectangle "WiFi\n802.11 b/g/n" as WIFI #B3E5FC
+rectangle "Bluetooth\nLE 5.0" as BLE #B3E5FC
+rectangle "RF Front-End\n2.4 GHz" as RF #B3E5FC
+
+rectangle "Bus Matrix" as BUS #FFF9C4
+
+rectangle "AES-128\nSHA\nRSA\nHMAC\nDigital Sig" as CRYPTO #E1BEE7
+rectangle "Secure Boot v2\nFlash Encryption" as SECBOOT #E1BEE7
+
+rectangle "GPIO (22 pins)\nSPI / I2C / UART\nADC / PWM / I2S\nUSB Serial/JTAG" as PERIPH #FFE0B2
+
+rectangle "Power Mgmt\nMultiple sleep modes\nRTC domain" as PWR #FFCCBC
+
+CPU -down-> BUS
+ROM -up-> BUS
+SRAM -up-> BUS
+FLASH -up-> BUS
+BUS -down-> PERIPH
+BUS -down-> CRYPTO
+WIFI -right-> RF
+BLE -right-> RF
+BUS -right-> WIFI
+SECBOOT -left-> FLASH
+RTCSRAM -right-> PWR
+
+note bottom of CPU
+  Open RISC-V ISA
+  (vs ESP32 proprietary Xtensa)
+  Same ESP-IDF SDK
+  Single core (vs dual)
+end note
+
+@enduml
