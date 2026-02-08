@@ -50,7 +50,7 @@ Document the internal architecture of selected semiconductors at varying depths.
 
 ## Documentation Standards
 
-- Consistent file naming: `overview.md`, `architecture.md`, `pinout.md`, `registers.md`, `power.md`
+- Consistent file naming: `README.md` (overview), `architecture.md`, `pinout.md`, `registers.md`, `power.md`
 - Primary chips add: `dsp_details.md` (SI4735), `wifi_bluetooth.md` / `security.md` (ESP32), `firmware.md`, `benchmarks/`
 - Cross-references between related chips (e.g., SI4735 → SI4703 comparison)
 - Every register description includes: name, address, bit fields, reset value, access type, description

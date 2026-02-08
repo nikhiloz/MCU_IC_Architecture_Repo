@@ -25,27 +25,27 @@ A detailed, hands-on reference for understanding the internal structure of popul
 
 | Chip | Manufacturer | Type | Core | Key Feature |
 |------|-------------|------|------|-------------|
-| [**SI4735**](docs/SI4735/overview.md) | Silicon Labs | AM/FM/SW/LW Tuner IC | DSP core | Digital radio with programmable DSP, I2C/SPI control |
-| [**ESP32-WROOM-32**](docs/ESP32/overview.md) | Espressif | WiFi/BT SoC | Xtensa LX6 (dual-core) | WiFi + Bluetooth + rich peripherals |
+| [**SI4735**](docs/SI4735/) | Silicon Labs | AM/FM/SW/LW Tuner IC | DSP core | Digital radio with programmable DSP, I2C/SPI control |
+| [**ESP32-WROOM-32**](docs/ESP32/) | Espressif | WiFi/BT SoC | Xtensa LX6 (dual-core) | WiFi + Bluetooth + rich peripherals |
 
 ### Secondary — Radio/Tuner ICs
 
 | Chip | Manufacturer | Type | DSP? | Interface | Notes |
 |------|-------------|------|------|-----------|-------|
-| [SI4703](docs/tuners/SI4703/overview.md) | Silicon Labs | FM Tuner | No | I2C | Good contrast with SI4735 (no DSP) |
-| [RDA5807](docs/tuners/RDA5807/overview.md) | RDA Micro | FM Tuner | No | I2C | Cheapest FM tuner, widely available |
-| [RTL2832U](docs/tuners/RTL2832U/overview.md) | Realtek | DVB-T / SDR Demod | Yes | USB | The SDR dongle chip |
-| [R820T2](docs/tuners/R820T2/overview.md) | Rafael Micro | RF Tuner | No | I2C (via RTL2832U) | Analog front-end paired with RTL2832U |
-| [CC1101](docs/tuners/CC1101/overview.md) | Texas Instruments | Sub-GHz Transceiver | No | SPI | 315/433/868/915 MHz, entry-level |
+| [SI4703](docs/tuners/SI4703/) | Silicon Labs | FM Tuner | No | I2C | Good contrast with SI4735 (no DSP) |
+| [RDA5807](docs/tuners/RDA5807/) | RDA Micro | FM Tuner | No | I2C | Cheapest FM tuner, widely available |
+| [RTL2832U](docs/tuners/RTL2832U/) | Realtek | DVB-T / SDR Demod | Yes | USB | The SDR dongle chip |
+| [R820T2](docs/tuners/R820T2/) | Rafael Micro | RF Tuner | No | I2C (via RTL2832U) | Analog front-end paired with RTL2832U |
+| [CC1101](docs/tuners/CC1101/) | Texas Instruments | Sub-GHz Transceiver | No | SPI | 315/433/868/915 MHz, entry-level |
 
 ### Secondary — MCUs
 
 | Chip | Manufacturer | Core | Key Feature | Notes |
 |------|-------------|------|-------------|-------|
-| [ATmega328P](docs/mcus/ATmega328P/overview.md) | Microchip/Atmel | 8-bit AVR | Arduino Uno/Nano chip | Entry-level, 16 MHz |
-| [RP2040](docs/mcus/RP2040/overview.md) | Raspberry Pi | Dual ARM Cortex-M0+ | PIO state machines | Used in Pi Pico |
-| [STM32F103](docs/mcus/STM32F103/overview.md) | STMicroelectronics | ARM Cortex-M3 | "Blue Pill" board | Entry-level ARM, 72 MHz |
-| [ESP32-C3](docs/mcus/ESP32_C3/overview.md) | Espressif | RISC-V (single-core) | WiFi + BLE | Architectural contrast with ESP32 |
+| [ATmega328P](docs/mcus/ATmega328P/) | Microchip/Atmel | 8-bit AVR | Arduino Uno/Nano chip | Entry-level, 16 MHz |
+| [RP2040](docs/mcus/RP2040/) | Raspberry Pi | Dual ARM Cortex-M0+ | PIO state machines | Used in Pi Pico |
+| [STM32F103](docs/mcus/STM32F103/) | STMicroelectronics | ARM Cortex-M3 | "Blue Pill" board | Entry-level ARM, 72 MHz |
+| [ESP32-C3](docs/mcus/ESP32_C3/) | Espressif | RISC-V (single-core) | WiFi + BLE | Architectural contrast with ESP32 |
 
 ---
 
@@ -55,7 +55,7 @@ A detailed, hands-on reference for understanding the internal structure of popul
 MCU_IC_Architecture_Repo/
 ├── docs/
 │   ├── SI4735/                    ← PRIMARY
-│   │   ├── overview.md
+│   │   ├── README.md
 │   │   ├── architecture.md
 │   │   ├── dsp_details.md
 │   │   ├── pinout.md
@@ -66,7 +66,7 @@ MCU_IC_Architecture_Repo/
 │   │   ├── diagrams/
 │   │   └── benchmarks/
 │   ├── ESP32/                     ← PRIMARY
-│   │   ├── overview.md
+│   │   ├── README.md
 │   │   ├── architecture.md
 │   │   ├── wifi_bluetooth.md
 │   │   ├── pinout.md
@@ -130,7 +130,7 @@ Lighter coverage: overview, block diagram, pinout, key registers, and one or two
 
 ### Navigate the Repo
 
-1. Start with a chip's `overview.md` for high-level understanding
+1. Start with a chip's `README.md` for high-level understanding
 2. Read `architecture.md` for the internal block diagram
 3. Dive into specific files (`registers.md`, `power.md`, etc.) as needed
 4. Run examples from the `examples/` subfolder
