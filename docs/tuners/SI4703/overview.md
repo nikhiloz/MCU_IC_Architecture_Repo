@@ -1,0 +1,30 @@
+# SI4703 — Overview
+
+## General Description
+
+The **SI4703** is an FM-only radio tuner IC by **Silicon Labs**. Unlike the SI4735, it has **no internal DSP** — it uses analog signal processing with digital control. Good baseline for understanding how a non-DSP tuner compares.
+
+## Key Specifications
+
+| Parameter | Value |
+|-----------|-------|
+| Manufacturer | Silicon Labs |
+| Type | FM Tuner (no AM/SW) |
+| FM Range | 76–108 MHz |
+| Supply Voltage | 2.7–5.5 V |
+| Interface | I2C (2-wire) |
+| RDS/RBDS | Yes |
+| Audio Output | Analog (headphone-level) |
+| Package | QFN-20 (3×3 mm) |
+
+## Key Difference from SI4735
+
+| Feature | SI4703 | SI4735 |
+|---------|--------|--------|
+| DSP | No | Yes |
+| AM/SW | No | Yes |
+| Bandwidth selection | Fixed | Programmable |
+| Control | Register-mapped I2C | Command/response protocol |
+| Complexity | Simple | Complex |
+
+> TODO: Add architecture, pinout, and register documentation

@@ -1,0 +1,63 @@
+@startuml SDR_Dongle_Architecture
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontSize 11
+
+title RTL2832U + R820T2 — SDR Dongle Architecture
+
+rectangle "Antenna\n(24 MHz – 1.7 GHz)" as ant #ECEFF1
+
+package "SDR Dongle (USB Stick)" as dongle #F5F5F5 {
+
+    rectangle "R820T2\nRF Tuner" as tuner #FFF3E0 {
+        rectangle "LNA\n(Low Noise Amp)" as lna #FFE0B2
+        rectangle "Mixer +\nLocal Oscillator\n(PLL)" as mixer #FFCC80
+        rectangle "IF Filter\n(3.57 MHz)" as if_f #FFB74D
+        rectangle "IF Amp\n+ VGA" as if_amp #FFA726
+    }
+
+    rectangle "RTL2832U\nDemodulator / ADC" as rtl #E3F2FD {
+        rectangle "ADC\n8-bit\n28.8 MSPS" as adc #BBDEFB
+        rectangle "Digital\nDown-converter" as ddc #90CAF9
+        rectangle "Decimation\nFilter" as decim #64B5F6
+        rectangle "USB 2.0\nInterface" as usb #42A5F5
+    }
+
+    rectangle "I2C Bus" as i2c #E0E0E0
+}
+
+rectangle "Host PC" as pc #E8F5E9 {
+    rectangle "USB Driver\n(librtlsdr)" as driver #C8E6C9
+    rectangle "Software DSP\n(GNU Radio / SDR# / GQRX)" as sw_dsp #A5D6A7
+    rectangle "Demodulation\n(AM/FM/SSB/Digital)" as demod #81C784
+    rectangle "Audio / Data\nOutput" as output #66BB6A
+}
+
+' Signal flow
+ant --> lna
+lna --> mixer
+mixer --> if_f
+if_f --> if_amp
+if_amp --> adc
+adc --> ddc
+ddc --> decim
+decim --> usb
+
+' I2C control
+rtl -left-> i2c : Controls
+i2c -left-> tuner : Tuning\ncommands
+
+' USB to PC
+usb --> driver : Raw I/Q\nsamples
+driver --> sw_dsp
+sw_dsp --> demod
+demod --> output
+
+note bottom of dongle
+  **Contrast with SI4735:**
+  SI4735 does all DSP in hardware (on-chip)
+  RTL-SDR offloads all DSP to software (PC)
+  → Infinitely flexible but needs a computer
+end note
+
+@enduml

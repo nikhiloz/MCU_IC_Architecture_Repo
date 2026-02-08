@@ -1,0 +1,53 @@
+@startuml SI4735_Signal_Flow
+skinparam backgroundColor #FFFFFF
+skinparam activityBackgroundColor #E3F2FD
+skinparam activityBorderColor #1565C0
+skinparam shadowing false
+
+title SI4735 — FM Signal Processing Flow
+
+|RF Front-End|
+start
+:Receive FM signal\n(64–108 MHz);
+:Low Noise Amplifier (LNA)\nAmplify weak RF signal;
+:Mixer + Local Oscillator\nDown-convert to IF;
+:IF Filter\nReject adjacent channels;
+
+|ADC|
+:Analog-to-Digital Conversion\nDigitise IF signal;
+
+|DSP Core|
+:FM Demodulation\n(Frequency Discriminator);
+
+fork
+  :Channel Filter\nProgrammable bandwidth\n(60/84/110/150 kHz);
+  :AGC Processing\nAdjust digital gain\n(attack/decay rates);
+fork again
+  :RDS Extraction\n57 kHz subcarrier\nDecode PS, RT, PTY, CT;
+fork again
+  :AFC Loop\nTrack carrier drift\nCorrect frequency offset;
+end fork
+
+:Stereo MPX Decoding\n19 kHz pilot detection\nL+R / L-R separation;
+
+:Stereo Blend\nMono ↔ Stereo transition\nbased on RSSI/SNR;
+
+|DAC|
+:Digital-to-Analog Conversion;
+
+|Audio Output|
+:Left Channel (LOUT);
+:Right Channel (ROUT);
+stop
+
+note right
+  **Signal Quality Metrics**
+  Available at any point:
+  • RSSI (dBμV)
+  • SNR (dB)
+  • Multipath level
+  • Frequency offset
+  • Valid channel flag
+end note
+
+@enduml

@@ -1,0 +1,99 @@
+@startuml SI4735_Architecture
+skinparam backgroundColor #FFFFFF
+skinparam componentStyle rectangle
+skinparam defaultFontSize 11
+skinparam shadowing false
+
+title SI4735 — Internal Architecture Block Diagram
+
+package "SI4735 (SSOP-24)" as chip #F5F5F5 {
+
+    rectangle "RF Front-End" as rf #E3F2FD {
+        rectangle "FM LNA" as fm_lna #BBDEFB
+        rectangle "AM LNA" as am_lna #BBDEFB
+        rectangle "SW LNA" as sw_lna #BBDEFB
+        rectangle "Mixer" as mixer #90CAF9
+        rectangle "IF Filter" as if_filter #64B5F6
+    }
+
+    rectangle "ADC" as adc #FFF9C4
+
+    rectangle "DSP Core" as dsp #E8F5E9 {
+        rectangle "Demodulator\n(AM/FM/SSB)" as demod #C8E6C9
+        rectangle "Channel Filter\n(Programmable BW)" as ch_filter #A5D6A7
+        rectangle "AGC\n(Auto Gain Ctrl)" as agc #81C784
+        rectangle "Stereo Decoder\n(FM MPX)" as stereo #66BB6A
+        rectangle "RDS/RBDS\nDecoder" as rds #4CAF50
+        rectangle "AFC\n(Auto Freq Ctrl)" as afc #43A047
+    }
+
+    rectangle "DAC" as dac #FFF9C4
+
+    rectangle "Audio Output" as audio #FFECB3 {
+        rectangle "Left (LOUT)" as lout #FFE082
+        rectangle "Right (ROUT)" as rout #FFE082
+    }
+
+    rectangle "Control" as ctrl #FCE4EC {
+        rectangle "I2C / SPI\nInterface" as bus #F8BBD0
+        rectangle "Property\nRegisters" as props #F48FB1
+    }
+
+    rectangle "Clock" as clk #E1BEE7 {
+        rectangle "32.768 kHz\nXTAL Osc" as xtal #CE93D8
+        rectangle "PLL" as pll #BA68C8
+    }
+}
+
+' External connections
+rectangle "FM Antenna" as fm_ant #ECEFF1
+rectangle "AM Antenna" as am_ant #ECEFF1
+rectangle "SW Antenna" as sw_ant #ECEFF1
+rectangle "Host MCU" as mcu #ECEFF1
+rectangle "Crystal\n32.768 kHz" as ext_xtal #ECEFF1
+
+' Signal flow
+fm_ant --> fm_lna
+am_ant --> am_lna
+sw_ant --> sw_lna
+
+fm_lna --> mixer
+am_lna --> mixer
+sw_lna --> mixer
+
+mixer --> if_filter
+if_filter --> adc
+adc --> demod
+demod --> ch_filter
+ch_filter --> agc
+agc --> stereo
+stereo --> dac
+demod --> rds
+demod --> afc
+
+dac --> lout
+dac --> rout
+
+' Control connections
+mcu --> bus
+bus --> props
+props --> dsp
+props --> rf
+
+' Clock
+ext_xtal --> xtal
+xtal --> pll
+pll --> dsp
+pll --> rf
+
+legend right
+  |= Color |= Subsystem |
+  | <#E3F2FD> | RF Front-End |
+  | <#FFF9C4> | Data Converters (ADC/DAC) |
+  | <#E8F5E9> | DSP Core |
+  | <#FFECB3> | Audio Output |
+  | <#FCE4EC> | Control Interface |
+  | <#E1BEE7> | Clock/Timing |
+end legend
+
+@enduml

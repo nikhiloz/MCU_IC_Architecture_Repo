@@ -1,0 +1,92 @@
+@startuml ESP32_Power_Domains
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontSize 10
+
+title ESP32 — Power Domains & Sleep Modes
+
+rectangle "Active Mode (~180 mA WiFi TX)" as active #C8E6C9 {
+    rectangle "Digital Domain" as digital #E8F5E9 {
+        rectangle "CPU Core 0\n+ Core 1" as cpu
+        rectangle "SRAM\n520 KB" as sram
+        rectangle "Peripherals\n(GPIO, SPI, I2C...)" as periph
+        rectangle "DMA" as dma
+        rectangle "Crypto" as crypto
+    }
+
+    rectangle "RF Domain" as rf_domain #FFF3E0 {
+        rectangle "WiFi\nMAC + PHY" as wifi
+        rectangle "Bluetooth\nMAC + PHY" as bt
+        rectangle "PLL" as pll
+        rectangle "RF\nFront-End" as rf_fe
+    }
+
+    rectangle "Flash Domain" as flash_domain #EFEBE9 {
+        rectangle "SPI Flash" as flash
+        rectangle "PSRAM\n(optional)" as psram
+    }
+
+    rectangle "RTC Domain" as rtc_domain #E1BEE7 {
+        rectangle "RTC\nController" as rtc
+        rectangle "ULP\nCo-processor" as ulp
+        rectangle "RTC SRAM\n8+8 KB" as rtc_sram
+        rectangle "RTC GPIO" as rtc_gpio
+        rectangle "Touch\nSensor" as rtc_touch
+    }
+}
+
+note right of active
+  **All domains powered**
+  CPU @ 240 MHz
+  WiFi/BT active
+  Full peripheral access
+end note
+
+rectangle "Modem Sleep (~20 mA)" as modem #FFFDE7 {
+    note right
+        RF Domain **OFF**
+        CPU + Peripherals ON
+        Flash ON
+        RTC ON
+    end note
+}
+
+rectangle "Light Sleep (~0.8 mA)" as light #FFF9C4 {
+    note right
+        RF Domain **OFF**
+        CPU **PAUSED** (clock-gated)
+        SRAM **retained**
+        Flash **OFF**
+        RTC ON
+        WiFi assoc maintained (DTIM wake)
+        Wake: <1 ms
+    end note
+}
+
+rectangle "Deep Sleep (~10 μA)" as deep #FFE0B2 {
+    note right
+        Digital Domain **OFF**
+        RF Domain **OFF**
+        Flash **OFF**
+        **Only RTC Domain ON**
+        ULP can run programs
+        RTC SRAM persists data
+        Wake = full reboot (~10 ms)
+    end note
+}
+
+rectangle "Hibernation (~5 μA)" as hibernate #FFCCBC {
+    note right
+        Everything **OFF**
+        except RTC timer
+        No ULP, no RTC SRAM
+        Wake = full reboot
+    end note
+}
+
+active -down-> modem : "Disable radio"
+modem -down-> light : "Pause CPU"
+light -down-> deep : "Power off\ndigital domain"
+deep -down-> hibernate : "Power off\nRTC SRAM + ULP"
+
+@enduml

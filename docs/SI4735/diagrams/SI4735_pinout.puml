@@ -1,0 +1,59 @@
+@startuml SI4735_Pinout
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontSize 10
+
+title SI4735 — SSOP-24 Pinout
+
+rectangle "SI4735 SSOP-24" as chip #F5F5F5 {
+    rectangle "**Pin 1**  DOUT (SPI data out)" as p1 #BBDEFB
+    rectangle "**Pin 2**  DIN (SPI data in)" as p2 #BBDEFB
+    rectangle "**Pin 3**  SCLK (I2C SCL / SPI CLK)" as p3 #BBDEFB
+    rectangle "**Pin 4**  SDIO (I2C SDA / SPI DATA)" as p4 #BBDEFB
+    rectangle "**Pin 5**  SEN (Addr select / SPI CS)" as p5 #BBDEFB
+    rectangle "**Pin 6-7** NC" as p67 #E0E0E0
+    rectangle "**Pin 8**  RCLK (Ref clock input)" as p8 #E1BEE7
+    rectangle "**Pin 9**  GPO3 / DCLK" as p9 #C8E6C9
+    rectangle "**Pin 10** GPO2 / INT" as p10 #C8E6C9
+    rectangle "**Pin 11** GPO1 / DOUT" as p11 #C8E6C9
+    rectangle "**Pin 12** VDD (2.7-5.5V)" as p12 #FFCDD2
+    rectangle "**Pin 13** GND" as p13 #FFCDD2
+    rectangle "**Pin 14** ROUT (Right audio)" as p14 #FFECB3
+    rectangle "**Pin 15** LOUT (Left audio)" as p15 #FFECB3
+    rectangle "**Pin 16-17** NC" as p1617 #E0E0E0
+    rectangle "**Pin 18** FMI (FM antenna)" as p18 #FFF3E0
+    rectangle "**Pin 19** RFGND (RF ground)" as p19 #FFF3E0
+    rectangle "**Pin 20** AMI (AM antenna)" as p20 #FFF3E0
+    rectangle "**Pin 21-22** NC" as p2122 #E0E0E0
+    rectangle "**Pin 23** XTALO (Crystal out)" as p23 #E1BEE7
+    rectangle "**Pin 24** XTALI (Crystal in)" as p24 #E1BEE7
+}
+
+note top of chip
+  **Interface Selection (SEN pin at boot)**
+  SEN LOW  = I2C address 0x11
+  SEN HIGH = I2C address 0x63
+  SEN to SCLK = SPI mode
+end note
+
+note bottom of chip
+  **Minimum External Components**
+  - 32.768 kHz crystal (XTALI/XTALO)
+  - 100 nF decoupling cap (VDD)
+  - FM whip antenna (FMI)
+  - AM loop antenna (AMI)
+  - 4.7k pull-ups (I2C)
+end note
+
+legend right
+  |= Color |= Function |
+  | <#BBDEFB> | Digital Interface |
+  | <#C8E6C9> | GPIO / Interrupt |
+  | <#FFECB3> | Audio Output |
+  | <#FFF3E0> | RF / Antenna |
+  | <#E1BEE7> | Clock |
+  | <#FFCDD2> | Power |
+  | <#E0E0E0> | No Connect |
+end legend
+
+@enduml

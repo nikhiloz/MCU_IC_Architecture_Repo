@@ -1,0 +1,78 @@
+@startuml ESP32_WiFi_BT_Stack
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontSize 10
+
+title ESP32 — WiFi & Bluetooth Protocol Stack
+
+rectangle "Application Layer" as app #E8EAF6 {
+    rectangle "User Application\n(app_main)" as user_app #C5CAE9
+}
+
+rectangle "ESP-IDF Framework" as idf #E3F2FD {
+    rectangle "esp_wifi API" as wifi_api #BBDEFB
+    rectangle "esp_bt API" as bt_api #BBDEFB
+    rectangle "TCP/IP Stack\n(lwIP)" as tcpip #90CAF9
+    rectangle "Event Loop" as events #64B5F6
+}
+
+rectangle "WiFi Stack" as wifi_stack #E8F5E9 {
+    rectangle "WiFi Manager\n(STA / AP / Sniffer)" as wifi_mgr #C8E6C9
+    rectangle "WPA Supplicant\n(WPA/WPA2/WPA3)" as wpa #A5D6A7
+    rectangle "802.11 MAC Layer\n(CSMA/CA, QoS, Aggregation)" as mac #81C784
+    rectangle "802.11 PHY / Baseband\n(OFDM, DSSS, CCK)" as phy #66BB6A
+}
+
+rectangle "Bluetooth Stack" as bt_stack #FFF3E0 {
+    rectangle "BLE GATT / GAP" as gatt #FFE0B2
+    rectangle "BT Classic Profiles\n(A2DP, SPP, HFP, HID)" as profiles #FFCC80
+    rectangle "L2CAP" as l2cap #FFB74D
+    rectangle "Link Manager\n(LMP / LL)" as lmp #FFA726
+    rectangle "BT Baseband\n(Freq Hopping, BLE Adv)" as bt_bb #FF9800
+}
+
+rectangle "Hardware" as hw #FFEBEE {
+    rectangle "Coexistence\nArbiter" as coex #FFCDD2
+    rectangle "RF Front-End\n2.4 GHz" as rf #EF9A9A
+    rectangle "Antenna" as ant #E57373
+}
+
+' WiFi path
+user_app --> wifi_api
+wifi_api --> wifi_mgr
+wifi_api --> tcpip
+wifi_mgr --> wpa
+wpa --> mac
+mac --> phy
+phy --> coex
+
+' BT path
+user_app --> bt_api
+bt_api --> gatt
+bt_api --> profiles
+gatt --> l2cap
+profiles --> l2cap
+l2cap --> lmp
+lmp --> bt_bb
+bt_bb --> coex
+
+' Shared hardware
+coex --> rf
+rf --> ant
+
+' Events
+events --> wifi_api
+events --> bt_api
+events --> user_app
+
+legend right
+  **Coexistence Arbiter**
+  Time-division multiplexes
+  WiFi and BT on shared
+  2.4 GHz radio.
+
+  Priority-based scheduling.
+  Configurable via API.
+end legend
+
+@enduml

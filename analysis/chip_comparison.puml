@@ -1,0 +1,35 @@
+@startuml Chip_Comparison
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontSize 10
+
+title MCU Comparison — Architecture Overview
+
+rectangle "8-bit" as tier8 #FFEBEE {
+    rectangle "**ATmega328P**\nAVR 8-bit @ 16 MHz\n2 KB RAM, 32 KB Flash\nNo wireless\nFixed pin functions" as avr #FFCDD2
+}
+
+rectangle "32-bit ARM" as tier32arm #E3F2FD {
+    rectangle "**STM32F103**\nCortex-M3 @ 72 MHz\n20 KB RAM, 128 KB Flash\nNo wireless\nSWD debug, USB, CAN" as stm32 #BBDEFB
+
+    rectangle "**RP2040**\nDual Cortex-M0+ @ 133 MHz\n264 KB RAM, 2 MB ext Flash\nNo wireless (add-on)\n**PIO state machines**" as rp #90CAF9
+}
+
+rectangle "32-bit Xtensa / RISC-V + Wireless" as tier32w #E8F5E9 {
+    rectangle "**ESP32**\nDual Xtensa LX6 @ 240 MHz\n520 KB RAM, 4 MB ext Flash\nWiFi + BT Classic + BLE\nGPIO matrix, crypto HW" as esp32 #C8E6C9
+
+    rectangle "**ESP32-C3**\nRISC-V @ 160 MHz\n400 KB RAM, 4 MB ext Flash\nWiFi + BLE 5.0\nOpen ISA, lower cost" as esp32c3 #A5D6A7
+}
+
+avr -right-> stm32 : "More power\n+ ARM ecosystem"
+stm32 -right-> rp : "Dual core\n+ PIO"
+rp -down-> esp32 : "+ WiFi/BT\n+ crypto"
+esp32 -right-> esp32c3 : "RISC-V\n- cost"
+
+note bottom
+  **Increasing complexity →**
+  ATmega328P is fully understandable at register level.
+  ESP32 is a complex SoC — documentation helps navigate it.
+end note
+
+@enduml

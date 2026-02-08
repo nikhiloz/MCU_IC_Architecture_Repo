@@ -1,0 +1,63 @@
+@startuml ATmega328P_Architecture
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontSize 10
+
+title ATmega328P — Internal Architecture
+
+package "ATmega328P (DIP-28)" as chip #F5F5F5 {
+
+    rectangle "8-bit AVR CPU\n@ 16 MHz" as cpu #E3F2FD {
+        rectangle "ALU\n(8-bit)" as alu #90CAF9
+        rectangle "32 General Purpose\nRegisters (R0–R31)" as regs #BBDEFB
+        rectangle "Program Counter" as pc #64B5F6
+        rectangle "Stack Pointer" as sp #42A5F5
+        rectangle "Status Register\n(SREG)" as sreg #90CAF9
+    }
+
+    rectangle "Memory" as mem #FFF9C4 {
+        rectangle "Flash\n32 KB\n(program)" as flash #FFF176
+        rectangle "SRAM\n2 KB\n(data)" as sram #FFEE58
+        rectangle "EEPROM\n1 KB\n(persistent)" as eeprom #FFD54F
+    }
+
+    rectangle "Peripherals" as periph #E8F5E9 {
+        rectangle "GPIO\n23 pins\n(3 ports: B, C, D)" as gpio #C8E6C9
+        rectangle "Timer0\n8-bit" as t0 #A5D6A7
+        rectangle "Timer1\n16-bit" as t1 #81C784
+        rectangle "Timer2\n8-bit" as t2 #66BB6A
+        rectangle "USART\n(UART)" as uart #4CAF50
+        rectangle "SPI\nMaster/Slave" as spi #43A047
+        rectangle "TWI\n(I2C)" as i2c #388E3C
+        rectangle "ADC\n6ch × 10-bit" as adc #2E7D32
+        rectangle "Analog\nComparator" as acmp #1B5E20
+        rectangle "Watchdog\nTimer" as wdt #A5D6A7
+    }
+
+    rectangle "Clock" as clk #E1BEE7 {
+        rectangle "Oscillator\n(ext 16 MHz crystal\nor int 8 MHz RC)" as osc #CE93D8
+        rectangle "Prescaler" as prescaler #BA68C8
+    }
+
+    rectangle "Interrupt\nController\n(26 vectors)" as irq #FFCDD2
+
+    rectangle "ISP / debugWIRE\nProgramming" as prog #EFEBE9
+}
+
+' Connections
+cpu --> mem
+cpu --> periph
+cpu --> irq
+osc --> prescaler
+prescaler --> cpu
+prog --> flash
+
+note bottom of chip
+  **Harvard Architecture**
+  Separate buses for program memory (Flash)
+  and data memory (SRAM).
+  Most instructions execute in 1 clock cycle.
+  No GPIO matrix — pins have **fixed** functions.
+end note
+
+@enduml

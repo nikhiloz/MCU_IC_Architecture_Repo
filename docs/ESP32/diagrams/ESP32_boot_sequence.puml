@@ -1,0 +1,76 @@
+@startuml ESP32_Boot_Sequence
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam activityBackgroundColor #E3F2FD
+skinparam activityBorderColor #1565C0
+
+title ESP32 — Boot Sequence
+
+start
+
+:Power On / Reset;
+
+partition "**1st Stage Bootloader (ROM)**" #FFF9C4 {
+    :Read strapping pins\n(GPIO0, 2, 5, 12, 15);
+    if (GPIO0 == LOW?) then (yes)
+        :Enter **UART Download** mode\n(flash programming);
+        stop
+    else (no)
+        :**Normal Boot** from flash;
+    endif
+
+    :Initialise clock, SPI flash interface;
+    :Load 2nd-stage bootloader\nfrom flash @ **0x1000**;
+    :Verify bootloader image\n(CRC / Secure Boot);
+}
+
+partition "**2nd Stage Bootloader (Flash)**" #E8F5E9 {
+    :Read partition table\nfrom flash @ **0x8000**;
+    :Select application partition\n(factory / ota_0 / ota_1);
+
+    if (Secure Boot enabled?) then (yes)
+        :Verify app signature\n(RSA-3072);
+        if (Signature valid?) then (yes)
+            :Continue;
+        else (no)
+            :Abort boot;
+            stop
+        endif
+    else (no)
+        :CRC check only;
+    endif
+
+    if (Flash encryption enabled?) then (yes)
+        :Setup flash decryption\n(AES-256 transparent);
+    else (no)
+    endif
+
+    :Map application to memory\n(configure MMU cache);
+    :Jump to app entry point;
+}
+
+partition "**Application Startup**" #FCE4EC {
+    :ESP-IDF initialisation\n(heap, logging, NVS);
+    :Initialise FreeRTOS\n(PRO_CPU + APP_CPU);
+    :Start scheduler;
+
+    fork
+        :Core 0 (PRO_CPU)\nWiFi/BT protocol stack\nSystem tasks;
+    fork again
+        :Core 1 (APP_CPU)\n**app_main()** called\nUser application;
+    end fork
+}
+
+stop
+
+legend right
+  |= Stage |= Location |= Flash Offset |
+  | 1st Bootloader | ROM (internal) | N/A |
+  | 2nd Bootloader | SPI Flash | 0x1000 |
+  | Partition Table | SPI Flash | 0x8000 |
+  | NVS | SPI Flash | 0x9000 |
+  | PHY Init | SPI Flash | 0xD000 |
+  | Application | SPI Flash | 0x10000 |
+end legend
+
+@enduml

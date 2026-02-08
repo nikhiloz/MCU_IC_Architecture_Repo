@@ -1,0 +1,120 @@
+@startuml ESP32_Architecture
+skinparam backgroundColor #FFFFFF
+skinparam componentStyle rectangle
+skinparam defaultFontSize 10
+skinparam shadowing false
+
+title ESP32 — SoC Internal Architecture
+
+package "ESP32 SoC (QFN-48)" as soc #F5F5F5 {
+
+    rectangle "CPU Subsystem" as cpu_sub #E3F2FD {
+        rectangle "Xtensa LX6\nCore 0 (PRO)\n@ 240 MHz" as core0 #90CAF9
+        rectangle "Xtensa LX6\nCore 1 (APP)\n@ 240 MHz" as core1 #90CAF9
+        rectangle "ULP\nCo-processor\n(Ultra Low Power)" as ulp #B3E5FC
+        rectangle "I-Cache\n32 KB" as icache #BBDEFB
+        rectangle "D-Cache\n32 KB" as dcache #BBDEFB
+    }
+
+    rectangle "Memory" as mem_sub #FFF9C4 {
+        rectangle "ROM\n448 KB" as rom #FFEE58
+        rectangle "SRAM\n520 KB" as sram #FFF176
+        rectangle "RTC SRAM\n8 KB + 8 KB" as rtc_sram #FFF59D
+        rectangle "eFuse\n1024 bits" as efuse #FFF9C4
+    }
+
+    rectangle "Bus Matrix" as bus #E0E0E0 {
+        rectangle "AHB Bus" as ahb #BDBDBD
+        rectangle "APB Bus (80 MHz)" as apb #9E9E9E
+    }
+
+    rectangle "DMA Engine\n13 Channels" as dma #D1C4E9
+
+    rectangle "Crypto Hardware" as crypto #FCE4EC {
+        rectangle "AES\n128/192/256" as aes #F8BBD0
+        rectangle "SHA\n1/256/384/512" as sha #F48FB1
+        rectangle "RSA\n≤4096-bit" as rsa #F06292
+        rectangle "TRNG" as trng #EC407A
+    }
+
+    rectangle "Peripherals" as periph #E8F5E9 {
+        rectangle "GPIO Matrix\n34 pins" as gpio #C8E6C9
+        rectangle "SPI ×4" as spi #A5D6A7
+        rectangle "I2C ×2" as i2c #81C784
+        rectangle "UART ×3" as uart #66BB6A
+        rectangle "I2S ×2" as i2s #4CAF50
+        rectangle "ADC ×2\n12-bit, 18ch" as adc #43A047
+        rectangle "DAC ×2\n8-bit" as dac #388E3C
+        rectangle "LED PWM\n16ch" as pwm #2E7D32
+        rectangle "Touch\n10 pads" as touch #1B5E20
+        rectangle "Timers ×4\n64-bit" as timers #A5D6A7
+        rectangle "MCPWM" as mcpwm #81C784
+        rectangle "RMT ×8" as rmt #66BB6A
+        rectangle "SDIO/SD" as sdio #4CAF50
+        rectangle "EMAC" as emac #43A047
+    }
+
+    rectangle "Radio Subsystem" as radio #FFF3E0 {
+        rectangle "WiFi\n802.11 b/g/n\nMAC + Baseband" as wifi #FFE0B2
+        rectangle "Bluetooth\nClassic + BLE 4.2\nBaseband" as bt #FFCC80
+        rectangle "RF Front-End\nBalun + PA +\nLNA + Switch" as rf #FFB74D
+        rectangle "Coex\nArbiter" as coex #FFA726
+    }
+
+    rectangle "Clock & Power" as clkpwr #E1BEE7 {
+        rectangle "PLL\nClock Gen" as pll #CE93D8
+        rectangle "PMU\nPower Mgmt" as pmu #BA68C8
+        rectangle "RTC" as rtc #AB47BC
+    }
+
+    rectangle "External Flash\nInterface (QIO)" as flash_if #EFEBE9
+}
+
+' External
+rectangle "SPI Flash\n4 MB" as ext_flash #ECEFF1
+rectangle "40 MHz\nCrystal" as ext_xtal #ECEFF1
+rectangle "Antenna\n2.4 GHz" as antenna #ECEFF1
+
+' Internal connections
+core0 -down-> ahb
+core1 -down-> ahb
+ulp -down-> rtc_sram
+
+ahb -down-> apb
+ahb -right-> sram
+ahb -right-> rom
+ahb --> dma
+
+apb -down-> periph
+apb -down-> crypto
+apb --> radio
+
+dma --> periph
+
+wifi --> coex
+bt --> coex
+coex --> rf
+
+pll --> core0
+pll --> core1
+pmu --> rtc
+rtc --> ulp
+
+flash_if --> ext_flash
+
+' External connections
+ext_xtal --> pll
+rf --> antenna
+
+legend right
+  |= Color |= Subsystem |
+  | <#E3F2FD> | CPU / Processing |
+  | <#FFF9C4> | Memory |
+  | <#E8F5E9> | Peripherals |
+  | <#FFF3E0> | Radio (WiFi/BT) |
+  | <#FCE4EC> | Crypto Hardware |
+  | <#D1C4E9> | DMA |
+  | <#E1BEE7> | Clock & Power |
+end legend
+
+@enduml

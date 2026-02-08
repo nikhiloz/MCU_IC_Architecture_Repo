@@ -1,0 +1,67 @@
+@startuml RP2040_Architecture
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontSize 10
+
+title RP2040 — Internal Architecture (with PIO)
+
+package "RP2040 (QFN-56)" as chip #F5F5F5 {
+
+    rectangle "CPU" as cpus #E3F2FD {
+        rectangle "ARM Cortex-M0+\nCore 0 @ 133 MHz" as core0 #90CAF9
+        rectangle "ARM Cortex-M0+\nCore 1 @ 133 MHz" as core1 #90CAF9
+    }
+
+    rectangle "Memory" as mem #FFF9C4 {
+        rectangle "SRAM\n264 KB\n(6 banks)" as sram #FFF176
+        rectangle "ROM\n16 KB\n(bootloader)" as rom #FFEE58
+    }
+
+    rectangle "**PIO (Programmable I/O)**" as pio #FFEBEE {
+        rectangle "PIO Block 0\n4 State Machines\n(9 instructions)" as pio0 #FFCDD2
+        rectangle "PIO Block 1\n4 State Machines" as pio1 #EF9A9A
+        note bottom of pio0
+            Can implement:
+            WS2812, VGA, custom
+            serial, parallel bus...
+        end note
+    }
+
+    rectangle "Peripherals" as periph #E8F5E9 {
+        rectangle "GPIO\n30 pins" as gpio #C8E6C9
+        rectangle "SPI ×2" as spi #A5D6A7
+        rectangle "I2C ×2" as i2c #81C784
+        rectangle "UART ×2" as uart #66BB6A
+        rectangle "ADC ×4\n12-bit" as adc #4CAF50
+        rectangle "PWM\n16ch (8×2)" as pwm #43A047
+        rectangle "USB 1.1\nHost/Device" as usb #388E3C
+    }
+
+    rectangle "Bus Fabric\n(AHB-Lite crossbar)" as bus #E0E0E0
+
+    rectangle "DMA\n12 channels" as dma #D1C4E9
+
+    rectangle "Clock & Power" as clk #E1BEE7 {
+        rectangle "System PLL\n+ USB PLL" as pll #CE93D8
+        rectangle "ROSC\n(Ring Osc)" as rosc #BA68C8
+        rectangle "XOSC\n(12 MHz crystal)" as xosc #AB47BC
+    }
+
+    rectangle "QSPI Flash\nInterface" as qspi #EFEBE9
+}
+
+rectangle "External Flash\n2 MB (W25Q16)" as ext_flash #ECEFF1
+
+' Connections
+core0 --> bus
+core1 --> bus
+bus --> sram
+bus --> periph
+bus --> pio
+bus --> dma
+dma --> periph
+dma --> pio
+qspi --> ext_flash
+xosc --> pll
+
+@enduml

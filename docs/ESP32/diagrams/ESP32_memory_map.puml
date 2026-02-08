@@ -1,0 +1,50 @@
+@startuml ESP32_Memory_Map
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontSize 10
+
+title ESP32 -- Memory Map
+
+rectangle "0x0000_0000 -- Reserved" as r0 #E0E0E0
+rectangle "0x3F40_0000 -- External Flash (data)\n up to 4 MB, memory-mapped via cache" as r1 #E3F2FD
+rectangle "0x3F80_0000 -- External PSRAM (data)\n up to 4 MB (WROVER only)" as r2 #BBDEFB
+rectangle "0x3FF0_0000 -- Peripheral Registers\n GPIO, SPI, I2C, UART, etc." as r3 #FCE4EC
+rectangle "0x3FF8_0000 -- Internal ROM 1\n 384 KB (bootloader code)" as r4 #FFF9C4
+rectangle "0x3FFB_0000 -- Internal SRAM 2\n 200 KB (DRAM, heap)" as r5 #C8E6C9
+rectangle "0x3FFC_0000 -- Internal SRAM 1\n 128 KB (DRAM)" as r6 #A5D6A7
+rectangle "0x3FFE_0000 -- Internal SRAM 0\n 192 KB (can be IRAM or DRAM)" as r7 #81C784
+rectangle "0x4000_0000 -- Internal ROM 0\n 384 KB (instruction fetch)" as r8 #FFF9C4
+rectangle "0x400C_2000 -- External Flash (code)\n memory-mapped via MMU" as r9 #E3F2FD
+rectangle "0x5000_0000 -- RTC SLOW Memory\n 8 KB (ULP data, deep sleep persist)" as r10 #E1BEE7
+
+r0 -down-> r1
+r1 -down-> r2
+r2 -down-> r3
+r3 -down-> r4
+r4 -down-> r5
+r5 -down-> r6
+r6 -down-> r7
+r7 -down-> r8
+r8 -down-> r9
+r9 -down-> r10
+
+note right of r5
+  **Total Internal SRAM: 520 KB**
+  Split across SRAM0 + SRAM1 + SRAM2
+end note
+
+note right of r10
+  RTC memory survives deep sleep.
+  eFuse (1024 bits) at separate address.
+end note
+
+legend right
+  |= Color |= Type |
+  | <#E3F2FD> | External Memory (mapped) |
+  | <#C8E6C9> | Internal SRAM |
+  | <#FFF9C4> | Internal ROM |
+  | <#FCE4EC> | Peripheral Registers |
+  | <#E1BEE7> | RTC Memory |
+end legend
+
+@enduml

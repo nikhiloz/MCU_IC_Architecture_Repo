@@ -1,0 +1,43 @@
+@startuml SI4735_Command_Flow
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+
+title SI4735 — I2C Command/Response Protocol
+
+participant "Host MCU" as mcu
+participant "SI4735" as si
+
+== Power Up ==
+mcu -> si : POWER_UP (0x01)\n[FUNC=FM, OPMODE=Analog]
+si --> mcu : STATUS [CTS=1]
+note right: Device ready\nCTS = Clear To Send
+
+== Set Property ==
+mcu -> si : SET_PROPERTY (0x12)\n[FM_DEEMPHASIS = 50μs]
+si --> mcu : STATUS [CTS=1]
+
+== Tune ==
+mcu -> si : FM_TUNE_FREQ (0x20)\n[Freq = 99.5 MHz → 0x26AC]
+si --> mcu : STATUS [CTS=0, STCINT=0]
+note right: Tuning in progress...
+...
+si --> mcu : STATUS [CTS=1, STCINT=1]
+note right: Seek/Tune Complete
+
+== Read Status ==
+mcu -> si : FM_TUNE_STATUS (0x22)\n[INTACK=1]
+si --> mcu : STATUS + FREQ + RSSI + SNR
+note right: RSSI=45 dBμV\nSNR=25 dB\nFreq=9950 (99.5 MHz)
+
+== Read RDS ==
+mcu -> si : FM_RDS_STATUS (0x24)
+si --> mcu : STATUS + RDSA + RDSB + RDSC + RDSD
+note right: PS="BBC R4  "\nPTY=News
+
+== Power Down ==
+mcu -> si : POWER_DOWN (0x11)
+si --> mcu : STATUS [CTS=1]
+note right: ~5 μA standby
+
+@enduml

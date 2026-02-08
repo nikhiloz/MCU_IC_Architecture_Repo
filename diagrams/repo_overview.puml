@@ -1,0 +1,83 @@
+@startuml
+
+skinparam backgroundColor white
+skinparam defaultFontName Monospaced
+skinparam shadowing false
+skinparam componentStyle uml2
+skinparam arrowThickness 2
+
+title MCU & IC Architecture Repo — Coverage Map
+
+package "PRIMARY — Deep Documentation" #E8F5E9 {
+
+    package "SI4735\n(AM/FM/SW Tuner + DSP)" as si <<Rectangle>> #C8E6C9 {
+        [Architecture] as si_arch
+        [DSP Details] as si_dsp
+        [Registers] as si_reg
+        [Pinout] as si_pin
+        [Power Mgmt] as si_pwr
+        [Firmware] as si_fw
+    }
+
+    package "ESP32-WROOM-32\n(WiFi/BT SoC, Xtensa LX6)" as esp <<Rectangle>> #C8E6C9 {
+        [Architecture] as esp_arch
+        [WiFi / Bluetooth] as esp_wifi
+        [Registers] as esp_reg
+        [Pinout] as esp_pin
+        [Power Mgmt] as esp_pwr
+        [Security] as esp_sec
+        [Firmware] as esp_fw
+    }
+}
+
+package "SECONDARY — Tuner ICs" #FFF3E0 {
+    [SI4703\nFM only, no DSP] as si4703
+    [RDA5807\nUltra-low-cost FM] as rda
+    [RTL2832U\nSDR / DVB-T Demod] as rtl
+    [R820T2\nWideband RF Tuner] as r820
+    [CC1101\nSub-GHz Transceiver] as cc1101
+}
+
+package "SECONDARY — MCUs" #E3F2FD {
+    [ATmega328P\n8-bit AVR] as avr
+    [RP2040\nDual Cortex-M0+] as rp
+    [STM32F103\nCortex-M3] as stm
+    [ESP32-C3\nRISC-V] as c3
+}
+
+package "Cross-Chip Resources" #F3E5F5 {
+    [Comparative\nAnalysis] as analysis
+    [Shared\nDiagrams] as diagrams
+    [Code\nExamples] as examples
+    [Datasheet\nReferences] as refs
+}
+
+' Relationships
+si_arch -[hidden]right- esp_arch
+
+si4703 .down.> analysis : compared
+rda .down.> analysis : compared
+rtl -down-> r820 : paired with
+avr .down.> analysis : compared
+c3 .down.> analysis : compared
+
+si ..> analysis : vs tuner ICs
+esp ..> analysis : vs MCUs
+
+analysis -right-> diagrams
+analysis -right-> examples
+
+note bottom of si
+  I2C/SPI control
+  Firmware patching (SSB)
+  32.768 kHz crystal ref
+end note
+
+note bottom of esp
+  Dual-core 240 MHz
+  520 KB SRAM
+  Crypto accelerators
+  FreeRTOS SMP
+end note
+
+@enduml
