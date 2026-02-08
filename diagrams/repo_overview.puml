@@ -3,61 +3,28 @@
 skinparam backgroundColor white
 skinparam defaultFontName Arial
 skinparam shadowing false
-skinparam roundCorner 10
+skinparam defaultTextAlignment center
 skinparam rectangleBorderThickness 2
+skinparam arrowColor #555555
+skinparam arrowThickness 2
 
-skinparam rectangle {
-    BackgroundColor<<primary>> #2E7D32
-    FontColor<<primary>> white
-    BorderColor<<primary>> #1B5E20
+title <b><size:18>MCU & IC Architecture Repo</size></b>\n<size:11>From silicon block diagrams to register-level details</size>\n
 
-    BackgroundColor<<pri_doc>> #E8F5E9
-    FontColor<<pri_doc>> #1B5E20
-    BorderColor<<pri_doc>> #A5D6A7
-
-    BackgroundColor<<tuner>> #FFF3E0
-    FontColor<<tuner>> #E65100
-    BorderColor<<tuner>> #FFCC80
-
-    BackgroundColor<<mcu>> #E3F2FD
-    FontColor<<mcu>> #0D47A1
-    BorderColor<<mcu>> #90CAF9
-
-    BackgroundColor<<resource>> #F3E5F5
-    FontColor<<resource>> #4A148C
-    BorderColor<<resource>> #CE93D8
+together {
+  rectangle "<b><size:14>SI4735</size></b>\nAM/FM/SW Tuner + DSP\nSilicon Labs\n\n<size:10>Architecture  .  DSP Details  .  Registers\nPinout  .  Power  .  Firmware</size>" as SI #A5D6A7
+  rectangle "<b><size:14>ESP32-WROOM-32</size></b>\nWiFi/BT SoC, Xtensa LX6\nEspressif\n\n<size:10>Architecture  .  WiFi/BT  .  Registers\nPinout  .  Power  .  Security  .  Firmware</size>" as ESP #A5D6A7
 }
 
-title <b>MCU & IC Architecture Repo</b>\nFrom silicon block diagrams to register-level details
+together {
+  rectangle "<b>Tuner ICs</b>\nSI4703  .  RDA5807  .  RTL2832U  .  R820T2  .  CC1101" as TUN #FFE0B2
+  rectangle "<b>MCUs</b>\nATmega328P  .  RP2040  .  STM32F103  .  ESP32-C3" as MCU #BBDEFB
+}
 
-' ── Row 1: Primary Chips ──
-rectangle "**SI4735**\nAM/FM/SW Tuner + DSP\n//Silicon Labs//" as SI <<primary>>
-rectangle "**ESP32-WROOM-32**\nWiFi/BT SoC, Xtensa LX6\n//Espressif//" as ESP <<primary>>
+rectangle "<b>Cross-Chip Resources</b>\nComparative Analysis  .  PlantUML Diagrams  .  Code Examples  .  References" as RES #E1BEE7
 
-SI -[hidden]right- ESP
-
-' ── Row 2: Doc layers for primaries ──
-rectangle "Architecture  |  DSP Details  |  Registers\nPinout  |  Power  |  Firmware" as SI_DOCS <<pri_doc>>
-rectangle "Architecture  |  WiFi/BT  |  Registers\nPinout  |  Power  |  Security  |  Firmware" as ESP_DOCS <<pri_doc>>
-
-SI --> SI_DOCS : 7 deep docs
-ESP --> ESP_DOCS : 8 deep docs
-
-SI_DOCS -[hidden]right- ESP_DOCS
-
-' ── Row 3: Secondary families ──
-rectangle "**Tuner ICs**\nSI4703  |  RDA5807  |  RTL2832U  |  R820T2  |  CC1101" as TUNERS <<tuner>>
-rectangle "**MCUs**\nATmega328P  |  RP2040  |  STM32F103  |  ESP32-C3" as MCUS <<mcu>>
-
-SI_DOCS --> TUNERS : compared with
-ESP_DOCS --> MCUS : compared with
-
-TUNERS -[hidden]right- MCUS
-
-' ── Row 4: Shared resources ──
-rectangle "**Cross-Chip Resources**\nComparative Analysis  |  PlantUML Diagrams  |  Code Examples  |  Datasheet References" as RES <<resource>>
-
-TUNERS --> RES
-MCUS --> RES
+SI -down-> TUN
+ESP -down-> MCU
+TUN -down-> RES
+MCU -down-> RES
 
 @enduml
