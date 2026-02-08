@@ -1,83 +1,63 @@
 @startuml
 
 skinparam backgroundColor white
-skinparam defaultFontName Monospaced
+skinparam defaultFontName Arial
 skinparam shadowing false
-skinparam componentStyle uml2
-skinparam arrowThickness 2
+skinparam roundCorner 10
+skinparam rectangleBorderThickness 2
 
-title MCU & IC Architecture Repo — Coverage Map
+skinparam rectangle {
+    BackgroundColor<<primary>> #2E7D32
+    FontColor<<primary>> white
+    BorderColor<<primary>> #1B5E20
 
-package "PRIMARY — Deep Documentation" #E8F5E9 {
+    BackgroundColor<<pri_doc>> #E8F5E9
+    FontColor<<pri_doc>> #1B5E20
+    BorderColor<<pri_doc>> #A5D6A7
 
-    package "SI4735\n(AM/FM/SW Tuner + DSP)" as si <<Rectangle>> #C8E6C9 {
-        [Architecture] as si_arch
-        [DSP Details] as si_dsp
-        [Registers] as si_reg
-        [Pinout] as si_pin
-        [Power Mgmt] as si_pwr
-        [Firmware] as si_fw
-    }
+    BackgroundColor<<tuner>> #FFF3E0
+    FontColor<<tuner>> #E65100
+    BorderColor<<tuner>> #FFCC80
 
-    package "ESP32-WROOM-32\n(WiFi/BT SoC, Xtensa LX6)" as esp <<Rectangle>> #C8E6C9 {
-        [Architecture] as esp_arch
-        [WiFi / Bluetooth] as esp_wifi
-        [Registers] as esp_reg
-        [Pinout] as esp_pin
-        [Power Mgmt] as esp_pwr
-        [Security] as esp_sec
-        [Firmware] as esp_fw
-    }
+    BackgroundColor<<mcu>> #E3F2FD
+    FontColor<<mcu>> #0D47A1
+    BorderColor<<mcu>> #90CAF9
+
+    BackgroundColor<<resource>> #F3E5F5
+    FontColor<<resource>> #4A148C
+    BorderColor<<resource>> #CE93D8
 }
 
-package "SECONDARY — Tuner ICs" #FFF3E0 {
-    [SI4703\nFM only, no DSP] as si4703
-    [RDA5807\nUltra-low-cost FM] as rda
-    [RTL2832U\nSDR / DVB-T Demod] as rtl
-    [R820T2\nWideband RF Tuner] as r820
-    [CC1101\nSub-GHz Transceiver] as cc1101
-}
+title <b>MCU & IC Architecture Repo</b>\nFrom silicon block diagrams to register-level details
 
-package "SECONDARY — MCUs" #E3F2FD {
-    [ATmega328P\n8-bit AVR] as avr
-    [RP2040\nDual Cortex-M0+] as rp
-    [STM32F103\nCortex-M3] as stm
-    [ESP32-C3\nRISC-V] as c3
-}
+' ── Row 1: Primary Chips ──
+rectangle "**SI4735**\nAM/FM/SW Tuner + DSP\n//Silicon Labs//" as SI <<primary>>
+rectangle "**ESP32-WROOM-32**\nWiFi/BT SoC, Xtensa LX6\n//Espressif//" as ESP <<primary>>
 
-package "Cross-Chip Resources" #F3E5F5 {
-    [Comparative\nAnalysis] as analysis
-    [Shared\nDiagrams] as diagrams
-    [Code\nExamples] as examples
-    [Datasheet\nReferences] as refs
-}
+SI -[hidden]right- ESP
 
-' Relationships
-si_arch -[hidden]right- esp_arch
+' ── Row 2: Doc layers for primaries ──
+rectangle "Architecture  |  DSP Details  |  Registers\nPinout  |  Power  |  Firmware" as SI_DOCS <<pri_doc>>
+rectangle "Architecture  |  WiFi/BT  |  Registers\nPinout  |  Power  |  Security  |  Firmware" as ESP_DOCS <<pri_doc>>
 
-si4703 .down.> analysis : compared
-rda .down.> analysis : compared
-rtl -down-> r820 : paired with
-avr .down.> analysis : compared
-c3 .down.> analysis : compared
+SI --> SI_DOCS : 7 deep docs
+ESP --> ESP_DOCS : 8 deep docs
 
-si ..> analysis : vs tuner ICs
-esp ..> analysis : vs MCUs
+SI_DOCS -[hidden]right- ESP_DOCS
 
-analysis -right-> diagrams
-analysis -right-> examples
+' ── Row 3: Secondary families ──
+rectangle "**Tuner ICs**\nSI4703  |  RDA5807  |  RTL2832U  |  R820T2  |  CC1101" as TUNERS <<tuner>>
+rectangle "**MCUs**\nATmega328P  |  RP2040  |  STM32F103  |  ESP32-C3" as MCUS <<mcu>>
 
-note bottom of si
-  I2C/SPI control
-  Firmware patching (SSB)
-  32.768 kHz crystal ref
-end note
+SI_DOCS --> TUNERS : compared with
+ESP_DOCS --> MCUS : compared with
 
-note bottom of esp
-  Dual-core 240 MHz
-  520 KB SRAM
-  Crypto accelerators
-  FreeRTOS SMP
-end note
+TUNERS -[hidden]right- MCUS
+
+' ── Row 4: Shared resources ──
+rectangle "**Cross-Chip Resources**\nComparative Analysis  |  PlantUML Diagrams  |  Code Examples  |  Datasheet References" as RES <<resource>>
+
+TUNERS --> RES
+MCUS --> RES
 
 @enduml
